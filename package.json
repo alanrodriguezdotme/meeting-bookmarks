@@ -23,6 +23,7 @@
     "@babel/preset-env": "^7.5.4",
     "@babel/preset-react": "^7.0.0",
     "babel-loader": "^8.0.6",
+    "microsoft-cognitiveservices-speech-sdk": "^1.8.0",
     "react-hot-loader": "^4.12.7",
     "webpack": "^4.35.3",
     "webpack-cli": "^3.3.6",
