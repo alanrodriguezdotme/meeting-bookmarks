@@ -1,2 +1,2 @@
-# minimalreactboilerplate
-React, Webpack, Babel, Styled Components. That's it.
+# Meeting Bookmark
+Easily bookmark anything discussed during a meeting.
