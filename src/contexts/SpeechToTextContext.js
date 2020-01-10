@@ -68,9 +68,11 @@ const SpeechToTextContextProvider = (props) => {
 					break
 				case "SpeechHypothesisEvent":
 					// setShowUtterance(true)
+					console.log("SpeechHypothesisEvent")
 					console.log(JSON.stringify(event.Result)) // check console for other information in result
 					break
 				case "SpeechFragmentEvent":
+					console.log("SpeechFragmentEvent")
 					console.log(JSON.stringify(event.Result)) // check console for other information in result
 					utterance ? utterance += (' ' + event.Result.Text) : utterance = event.Result.Text
 
@@ -79,19 +81,22 @@ const SpeechToTextContextProvider = (props) => {
 					}
 					break
 				case "SpeechEndDetectedEvent":
-					console.log("Processing_Adding_Final_Touches")
+					console.log("SpeechEndDetectedEvent")
 					console.log(JSON.stringify(event.Result)) // check console for other information in result
 					break
 				case "SpeechSimplePhraseEvent":
+					console.log("SpeechSimplePhraseEvent")
 					break
 				case "SpeechDetailedPhraseEvent":
+					console.log("SpeechDetailedPhraseEvent")
 					if (event.Result.NBest) {
-						console.log(event.Result.NBest[0].ITN)
-						utterance = null
 						appendTranscript(event.Result.NBest[0].ITN)
+						utterance = null
+						setUtterance(null)
 					}
 					break
 				case "RecognitionEndedEvent":
+					console.log("RecognitionEndedEvent")					
 					if (event.Result.NBest) {
 						console.log(event.Result.NBest[0].ITN)
 					}					

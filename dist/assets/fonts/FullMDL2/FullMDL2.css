@@ -26,3 +26,6 @@
 .icon-CircleStopSolid:before { content: '\F2DB'; }
 .icon-SingleBookmark:before { content: '\EDFF'; }
 .icon-SingleBookmarkSolid:before { content: '\EE00'; }
+.icon-AddBookmark:before { content: '\F5B7'; }
+.icon-BookmarkList:before { content: '\ECFC'; }
+.icon-Back:before { content: '\E72B'; }

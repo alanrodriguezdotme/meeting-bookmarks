@@ -10,12 +10,13 @@
   "author": "Alan Rodriguez",
   "license": "ISC",
   "dependencies": {
-    "microsoft-speech-browser-sdk": "0.0.12",
     "microsoft-cognitiveservices-speech-sdk": "^1.8.0",
+    "microsoft-speech-browser-sdk": "0.0.12",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "socket.io-client": "^2.2.0",
     "styled-components": "^4.3.2",
+    "underscore": "^1.9.2",
     "uuid": "^3.3.2"
   },
   "devDependencies": {
