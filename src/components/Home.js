@@ -71,33 +71,35 @@ const Home = () => {
 	let recordButtonClasses = isRecording ? 'icon icon-StopSolid' : 'icon icon-Record'
 
 	return (
-		<Container>
-			<Header bookmarksExist={_.findWhere(transcript, { bookmark: true }) ? true : false} right={<i onClick={ () => handleBookmarksClick() } className={ bookmarksExist ? 'icon icon-BookmarkList' : 'icon icon-BookmarkList disabled' } />} />
-			<Main>
-				{ transcript.length > 0 || isRecording ? renderTranscript() : renderHelp() }
-				{ utterance && 
-					<Line>
-						<UtteranceContainer>{ utterance && utterance }</UtteranceContainer>
-						<Bookmark onClick={ () => handleLineBookmarkClick(index) }>
-							{ shouldBookmark && <i className="icon icon-SingleBookmarkSolid" /> }
-						</Bookmark>
-					</Line>
-				}
-			</Main>
-			<Bottom>
-				<Left onClick={() => setLines(transcript)}></Left>
-				<Middle>					
-					<Button onClick={ () => handleRecordClick() }>
-						<i className={ recordButtonClasses } />
-					</Button>
-				</Middle>
-				<Right>
-					<Button onClick={ () => isRecording && transcript.length > 0 && handleFooterBookmarkClick() }>
-						<i className={ isRecording ? "icon icon-AddBookmark" : "icon icon-AddBookmark disabled"} />
-					</Button>
-				</Right>
-			</Bottom>	
-		</Container>
+		<Div100vh>
+			<Container>
+				<Header bookmarksExist={_.findWhere(transcript, { bookmark: true }) ? true : false} right={<i onClick={ () => handleBookmarksClick() } className={ bookmarksExist ? 'icon icon-BookmarkList' : 'icon icon-BookmarkList disabled' } />} />
+				<Main>
+					{ transcript.length > 0 || isRecording ? renderTranscript() : renderHelp() }
+					{ utterance && 
+						<Line>
+							<UtteranceContainer>{ utterance && utterance }</UtteranceContainer>
+							<Bookmark onClick={ () => handleLineBookmarkClick(index) }>
+								{ shouldBookmark && <i className="icon icon-SingleBookmarkSolid" /> }
+							</Bookmark>
+						</Line>
+					}
+				</Main>
+				<Bottom>
+					<Left onClick={() => setLines(transcript)}></Left>
+					<Middle>					
+						<Button onClick={ () => handleRecordClick() }>
+							<i className={ recordButtonClasses } />
+						</Button>
+					</Middle>
+					<Right>
+						<Button onClick={ () => isRecording && transcript.length > 0 && handleFooterBookmarkClick() }>
+							<i className={ isRecording ? "icon icon-AddBookmark" : "icon icon-AddBookmark disabled"} />
+						</Button>
+					</Right>
+				</Bottom>	
+			</Container>
+		</Div100vh>
 	)
 }
 
@@ -107,7 +109,7 @@ const Container = styled.div`
 	text-align: center;
 	display: flex;
 	flex-direction: column;
-	height: 100vh;
+	height: 100%;
 	background: black;
 	color: white;
 	width: 100vw;

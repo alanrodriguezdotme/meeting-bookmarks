@@ -1,5 +1,6 @@
 import React, { useContext, useEffect } from 'react'
 import styled from 'styled-components'
+import Div100vh from 'react-div-100vh'
 
 import { SpeechToTextContext } from '../contexts/SpeechToTextContext'
 import Home from './Home'
@@ -15,17 +16,19 @@ const Wrapper = (props) => {
 	}, [])
 
 	return (
-		<WrapperDiv showBookmarkList={ showBookmarkList }>
-			<Home />
-			<BookmarkList />
-		</WrapperDiv>
+		<Div100vh>
+			<WrapperDiv showBookmarkList={ showBookmarkList }>
+				<Home />
+				<BookmarkList />
+			</WrapperDiv>
+		</Div100vh>
 	);
 }
  
 export default Wrapper;
 
 const WrapperDiv = styled.div`
-	height: 100vh;
+	height: 100%;
 	width: 200vw;
 	display: flex;
 	overflow: hidden;

@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start": "webpack-dev-server --mode development",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack -p --config webpack.config.js"
   },
   "author": "Alan Rodriguez",
   "license": "ISC",
@@ -13,6 +14,7 @@
     "microsoft-cognitiveservices-speech-sdk": "^1.8.0",
     "microsoft-speech-browser-sdk": "0.0.12",
     "react": "^16.8.6",
+    "react-div-100vh": "^0.3.8",
     "react-dom": "^16.8.6",
     "socket.io-client": "^2.2.0",
     "styled-components": "^4.3.2",
