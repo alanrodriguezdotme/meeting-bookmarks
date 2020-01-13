@@ -5,23 +5,12 @@ import * as _ from 'underscore'
 import { GlobalContext } from '../contexts/GlobalContext'
 import { SpeechToTextContext } from '../contexts/SpeechToTextContext'
 import Header from './Header'
+import Controls from './Controls'
 
 const Home = () => {
-	let { handleMicClick, recognizerStop } = useContext(SpeechToTextContext)
-	let { isRecording, transcript, utterance, setUtterance, toggleBookmark, shouldBookmark, setShouldBookmark, setShowBookmarkList, bookmarksExist } = useContext(GlobalContext)
+	let { recognizerStop } = useContext(SpeechToTextContext)
+	let { isRecording, transcript, setTranscript, utterance, setUtterance, toggleBookmark, shouldBookmark, setShouldBookmark, setShowBookmarkList, bookmarksExist, shouldReset, setShouldReset } = useContext(GlobalContext)
 	let [ forceRender, setForceRender ] = useState(false)
-
-	const handleRecordClick = () => {
-		if (isRecording) {
-			recognizerStop()
-		} else {
-			handleMicClick()
-		}
-	}
-
-	useEffect(() => {
-		console.log(bookmarksExist)
-	})
 
 	const renderTranscript = () => {
 		return transcript.map((line, index) => {
@@ -39,7 +28,7 @@ const Home = () => {
 	const renderHelp = () => {
 		return (
 			<Help>
-				<div class="help-wrapper">
+				<div className="help-wrapper">
 					<div>Tap the red record button at the bottom to start recording and transcribing your conversation. </div>
 					<div>Tap the bookmark icons to bookmark the text next to it.</div>
 					<div>When you're done, you can view your bookmarks by tapping the icon in the top right.</div>
@@ -58,21 +47,24 @@ const Home = () => {
 		setShowBookmarkList(true)
 	}
 
-	const handleFooterBookmarkClick = () => {
-		if (utterance) {
-			setShouldBookmark(true)
-			console.log(shouldBookmark)
-		} else {
-			toggleBookmark(transcript.length - 1)
-		}		
-		setForceRender(!forceRender)
+	const clearTranscript = () => {
+		recognizerStop()
+		setTranscript([])
+		setShouldReset(true)
 	}
-
-	let recordButtonClasses = isRecording ? 'icon icon-StopSolid' : 'icon icon-Record'
 
 	return (
 		<Container>
-			<Header bookmarksExist={_.findWhere(transcript, { bookmark: true }) ? true : false} right={<i onClick={ () => handleBookmarksClick() } className={ bookmarksExist ? 'icon icon-BookmarkList' : 'icon icon-BookmarkList disabled' } />} />
+			<Header
+				transcriptExist={ transcript.length > 0 }
+				left={ <i 
+					onClick={ () => clearTranscript() }
+					className={ transcript.length > 0 ? 'icon icon-Clear' : null } /> }
+				bookmarksExist={ _.findWhere(transcript, { bookmark: true }) ? true : false } 
+				right={ <i 
+					onClick={ () => handleBookmarksClick() } 
+					className={ bookmarksExist ? 'icon icon-BookmarkList' : 'icon icon-BookmarkList disabled' } /> 
+					} />
 			<Main>
 				{ transcript.length > 0 || isRecording ? renderTranscript() : renderHelp() }
 				{ utterance && 
@@ -84,19 +76,9 @@ const Home = () => {
 					</Line>
 				}
 			</Main>
-			<Bottom>
-				<Left onClick={() => setLines(transcript)}></Left>
-				<Middle>					
-					<Button onClick={ () => handleRecordClick() }>
-						<i className={ recordButtonClasses } />
-					</Button>
-				</Middle>
-				<Right>
-					<Button onClick={ () => isRecording && transcript.length > 0 && handleFooterBookmarkClick() }>
-						<i className={ isRecording ? "icon icon-AddBookmark" : "icon icon-AddBookmark disabled"} />
-					</Button>
-				</Right>
-			</Bottom>	
+			<Controls 
+				isRecording={ isRecording }
+				shouldReset={ shouldReset } />
 		</Container>
 	)
 }
@@ -146,33 +128,12 @@ const Bottom = styled.div`
 	font-size: 32px;
 `
 
-const Left = styled.div`
-	width: 33%;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-`
-
-const Middle = styled.div`
-	flex: 1;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-`
-
-const Right = styled.div`
-	width: 33%;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-`
-
 const UtteranceContainer = styled.div`
 	width: calc(100% - 30px);
-	height: 30px;
 	text-align: left;
 	opacity: .75;
-	padding: 4px 10px;
+	padding: 8px 16px;
+	flex: 1;
 `
 
 const Button = styled.div`
@@ -199,7 +160,7 @@ const Button = styled.div`
 
 const Line = styled.div`
 	display: flex;
-	align-items: center;
+	align-items: flex-start;
 	justify-content: center;
 	width: 100%;
 	margin-bottom: 16px;
@@ -211,7 +172,7 @@ const Text = styled.div`
 	text-align: left;
 	flex: 1;
 	width: calc(100% - 30px);
-	padding: 4px 10px;
+	padding: 8px 16px;
 `
 
 const Bookmark = styled.div`
@@ -219,8 +180,16 @@ const Bookmark = styled.div`
 	height: 100%;
 	font-size: 16px;
 	display: flex;
-	align-items: center;
+	align-items: flex-start;
 	justify-content: center;
+
+	.icon {
+		width: 100%;
+		height: 50px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
 
 	.disabled {
 		opacity: 0.5;

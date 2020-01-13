@@ -6,19 +6,22 @@ export const GlobalContext = createContext()
 const GlobalContextProvider = (props) => {
 	let [ utterance, setUtterance ] = useState(null)
 	let [ isRecording, toggleIsRecording ] = useState(false)
-	let [ transcript, setTranscript ] = useState([
-		// {
-		// 	text: 'testing this out',
-		// 	bookmark: false
-		// },
-		// {
-		// 	text: 'more text here',
-		// 	bookmark: false
-		// }
-	])
+	let [ transcript, setTranscript ] = useState([])
 	let [ shouldBookmark, setShouldBookmark ] = useState(false)
 	let [ showBookmarkList, setShowBookmarkList ] = useState(false)
 	let [ bookmarksExist, setBookmarksExist ] = useState(false)
+	let [ shouldReset, setShouldReset ] = useState(false)
+
+	useEffect(() => {
+		if (shouldBookmark) {
+			let array = transcript
+			array[array.length - 1].bookmark = true
+			setTranscript(array)
+			setShouldBookmark(false)
+		}
+
+		console.log(transcript)
+	}, [transcript])
 
 	useEffect(() => {
 		let bookmarks = _.findWhere(transcript, { bookmark: true })
@@ -26,18 +29,18 @@ const GlobalContextProvider = (props) => {
 		else { setBookmarksExist(true) }
 	})
 
-	const appendTranscript = (text) => {
+	let appendTranscript = (text) => {
 		let array = transcript
-		array.push({ text, bookmark: shouldBookmark })
-		setTranscript(array)
+		let newObject = { text, bookmark: shouldBookmark }
+		array.push(newObject)
+		setTranscript([...array])
 		setUtterance(null)
-		setShouldBookmark(false)
 	}
 
 	const toggleBookmark = (index) => {
 		let array = transcript
 		array[index]['bookmark'] = !array[index]['bookmark']
-		setTranscript(array)
+		setTranscript([...array])
 	}
 
 	return (
@@ -48,7 +51,8 @@ const GlobalContextProvider = (props) => {
 			toggleBookmark,
 			shouldBookmark, setShouldBookmark,
 			showBookmarkList, setShowBookmarkList,
-			bookmarksExist
+			bookmarksExist,
+			shouldReset, setShouldReset
 		}}>
 			{ props.children }
 		</GlobalContext.Provider>

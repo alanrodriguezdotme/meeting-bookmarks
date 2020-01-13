@@ -54,7 +54,7 @@ const Container = styled.div`
 
 const Line = styled.div`
 	display: flex;
-	align-items: center;
+	align-items: flex-start;
 	justify-content: center;
 	width: 100%;
 	margin-bottom: 16px;
@@ -66,7 +66,7 @@ const Text = styled.div`
 	text-align: left;
 	flex: 1;
 	width: calc(100% - 30px);
-	padding: 4px 10px;
+	padding: 8px 16px;
 `
 
 const Bookmark = styled.div`
@@ -74,8 +74,16 @@ const Bookmark = styled.div`
 	height: 100%;
 	font-size: 16px;
 	display: flex;
-	align-items: center;
+	align-items: flex-start;
 	justify-content: center;
+
+	.icon {
+		width: 100%;
+		height: 50px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
 
 	.disabled {
 		opacity: 0.5;
