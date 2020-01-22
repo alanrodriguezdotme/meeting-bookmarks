@@ -3,17 +3,16 @@ import styled from 'styled-components'
 import { SpeechToTextContext } from '../contexts/SpeechToTextContext'
 import { GlobalContext } from '../contexts/GlobalContext'
 
-let timers = []
+// let timers = []
 
 const Controls = ({ isRecording, shouldReset }) => {
 	let { recognizerStop, handleMicClick } = useContext(SpeechToTextContext)
-	let { setShouldReset, toggleBookmark, transcript, shouldBookmark, setShouldBookmark, utterance } = useContext(GlobalContext)
-	let [ duration , setDuration ] = useState(0)
+	let { setShouldReset, toggleBookmark, transcript, setShouldBookmark, utterance, duration, setDuration, timestamp } = useContext(GlobalContext)
 	let [ forceRender, setForceRender ] = useState(false)
 
 	useEffect(() => {
 		if (shouldReset) {
-			stopTimer()
+			// stopTimer()
 			setDuration(0)
 			setShouldReset(false)
 		}
@@ -22,24 +21,24 @@ const Controls = ({ isRecording, shouldReset }) => {
 	const handleRecordClick = () => {
 		if (isRecording) {
 			recognizerStop()
-			stopTimer()
+			// stopTimer()
 		} else {
 			handleMicClick()
-			startTimer()
+			// startTimer()
 		}
 	}
 
-	const startTimer = () => {
-		timers.push(setInterval(() => {
-			setDuration(duration++)
-		}, 1000))
-	}
+	// const startTimer = () => {
+	// 	timers.push(setInterval(() => {
+	// 		setDuration(duration + 1)
+	// 	}, 1000))
+	// }
 
-	const stopTimer = () => {
-		for (let i = 0; i < timers.length; i++) {
-			clearInterval(timers[i])
-		}
-	}
+	// const stopTimer = () => {
+	// 	for (let i = 0; i < timers.length; i++) {
+	// 		clearInterval(timers[i])
+	// 	}
+	// }
 
 	const handleFooterBookmarkClick = () => {
 		if (utterance) {
@@ -48,24 +47,6 @@ const Controls = ({ isRecording, shouldReset }) => {
 			toggleBookmark(transcript.length - 1)
 		}		
 		setForceRender(!forceRender)
-	}
-
-	const renderDuration = () => {
-		let hours = Math.floor(duration / 60)
-		let minutes = duration % 60
-		hours = hours > 9 ? hours : '0' + hours
-		minutes = minutes > 9 ? minutes : '0' + minutes
-
-		return (
-			<Timestamp>
-				<span className="hours">
-					{ hours }
-				</span>:
-				<span className="minutes">
-					{ minutes }
-				</span>
-			</Timestamp>
-		)
 	}
 
 	let recordButtonClasses = isRecording ? 'icon icon-StopSolid' : 'icon icon-Record'
@@ -79,7 +60,7 @@ const Controls = ({ isRecording, shouldReset }) => {
 				</Button>
 			</Left>
 			<Middle>
-				{ renderDuration() }
+				<Timestamp>{ timestamp }</Timestamp>
 			</Middle>
 			<Right>
 				<FAButton 

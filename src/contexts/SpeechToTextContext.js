@@ -1,4 +1,4 @@
-import React, { createContext, useContext } from 'react'
+import React, { createContext, useContext, useEffect } from 'react'
 import * as SDK from 'microsoft-speech-browser-sdk'
 
 import { GlobalContext } from '../contexts/GlobalContext'
@@ -7,11 +7,22 @@ let subscriptionKey = '5bb1fd777df040f18623d946d3ae2833'
 let serviceRegion = 'westus'
 let recognizer
 let utterance
+let timers = []
+let seconds = 0
 
 export const SpeechToTextContext = createContext()
 
 const SpeechToTextContextProvider = (props) => {
-	let { setUtterance, appendTranscript, toggleIsRecording } = useContext(GlobalContext)
+	let { setUtterance, appendTranscript, toggleIsRecording, setDuration } = useContext(GlobalContext)
+
+	useEffect(() => {
+		// restarting recognizer after 10 minute limit
+		if (seconds == 600) {
+			recognizerStop()
+			initStt()
+			handleMicClick()
+		}
+	}, [seconds])
 
 	const initStt = () => {
 		recognizer = recognizerSetup(
@@ -21,6 +32,28 @@ const SpeechToTextContextProvider = (props) => {
 			'Detailed',
 			subscriptionKey
 		)
+	}
+
+	const startTimer = () => {
+		timers.push(setInterval(() => {
+			seconds++
+			setDuration(seconds)
+		}, 1000))
+	}
+
+	const stopTimer = () => {
+		for (let i = 0; i < timers.length; i++) {
+			clearInterval(timers[i])
+		}
+	}
+
+	const createTimestamp = (time) => {
+		let hours = Math.floor(time / 60)
+		let minutes = time % 60
+		hours = hours > 9 ? hours : '0' + hours
+		minutes = minutes > 9 ? minutes : '0' + minutes
+
+		return hours + ':' + minutes
 	}
 
 	const recognizerSetup = (SDK, recognitionMode, language, format, subscriptionKey) => {
@@ -53,6 +86,7 @@ const SpeechToTextContextProvider = (props) => {
 			switch (event.Name) {
 				case "RecognitionTriggeredEvent":
 					console.log("Initializing")
+					startTimer()
 					playEarcon('listening')
 					break
 				case "ListeningStartedEvent":
@@ -90,7 +124,7 @@ const SpeechToTextContextProvider = (props) => {
 				case "SpeechDetailedPhraseEvent":
 					console.log("SpeechDetailedPhraseEvent")
 					if (event.Result.NBest) {
-						appendTranscript(event.Result.NBest[0].ITN)
+						appendTranscript(event.Result.NBest[0].ITN, createTimestamp(seconds))
 						utterance = null
 						setUtterance(null)
 					}
@@ -102,6 +136,7 @@ const SpeechToTextContextProvider = (props) => {
 					}					
 					toggleIsRecording(false)
 					playEarcon('stoplistening')
+					stopTimer()
 					break
 			}
 		})
@@ -121,6 +156,7 @@ const SpeechToTextContextProvider = (props) => {
 			initStt()
 		}
 		
+		stopTimer()
 		toggleIsRecording(false)
 		setUtterance(null)
 		utterance = null
