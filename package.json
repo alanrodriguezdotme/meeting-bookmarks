@@ -11,6 +11,7 @@
   "author": "Alan Rodriguez",
   "license": "ISC",
   "dependencies": {
+    "emailjs-com": "^2.4.1",
     "microsoft-cognitiveservices-speech-sdk": "^1.8.0",
     "microsoft-speech-browser-sdk": "0.0.12",
     "react": "^16.8.6",
