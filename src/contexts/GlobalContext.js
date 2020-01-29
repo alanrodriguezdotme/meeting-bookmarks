@@ -7,26 +7,26 @@ const GlobalContextProvider = (props) => {
 	let [ utterance, setUtterance ] = useState(null)
 	let [ isRecording, toggleIsRecording ] = useState(false)
 	let [ transcript, setTranscript ] = useState([
-		// {
-		// 	text: 'testing',
-		// 	bookmark: true,
-		// 	timestamp: '00:00'
-		// },
-		// {
-		// 	text: 'more testing',
-		// 	bookmark: true,
-		// 	timestamp: '00:02'
-		// },
-		// {
-		// 	text: 'testing',
-		// 	bookmark: true,
-		// 	timestamp: '00:00'
-		// },
-		// {
-		// 	text: 'more testing',
-		// 	bookmark: true,
-		// 	timestamp: '00:02'
-		// }
+		{
+			text: 'testing',
+			bookmark: true,
+			timestamp: '00:00'
+		},
+		{
+			text: 'more testing',
+			bookmark: true,
+			timestamp: '00:02'
+		},
+		{
+			text: 'testing',
+			bookmark: true,
+			timestamp: '00:00'
+		},
+		{
+			text: 'more testing',
+			bookmark: true,
+			timestamp: '00:02'
+		}
 	])
 	let [ shouldBookmark, setShouldBookmark ] = useState(false)
 	let [ showBookmarkList, setShowBookmarkList ] = useState(false)

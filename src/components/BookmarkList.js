@@ -17,6 +17,7 @@ const BookmarkList = () => {
 	let [ emailSent, setEmailSent ] = useState(false)
 	let [ isSending, setIsSending ] = useState(false)
 	let [ postEmailMessage, setPostEmailMessage ] = useState(null)
+	let [ shouldClose, setShouldClose ] = useState(false)
 
 	useEffect(() => {
 		if (indexToEdit != null && textArea) {
@@ -68,14 +69,29 @@ const BookmarkList = () => {
 		return content
 	}
 
+	const handleCloseEmailForm = () => {
+		setShouldClose(true)
+		setTimeout(() => {
+			setShowEmailForm(false)
+			setShouldClose(false)
+		}, 500)
+	}
+
 	const renderEmailForm = () => {
 		return (
-			<EmailFormWrapper>
-				<Overlay onClick={() => setShowEmailForm(false)} />
+			<EmailFormWrapper 
+				id="emailFormWrapper"
+				showEmailForm={ showEmailForm }>
+				<Overlay 
+					shouldClose={ shouldClose }
+					showEmailForm={ showEmailForm }
+					onClick={() => handleCloseEmailForm() } />
 				{ emailSent && postEmailMessage ? 
 					renderPostEmailMessage() 
 					:
-					<EmailForm>
+					<EmailForm
+						showEmailForm={ showEmailForm }
+						shouldClose={ shouldClose }>
 						<div className="title">Email transcript</div>
 						<div className="emailFormRow">
 							<input className="emailInput"
@@ -104,7 +120,7 @@ const BookmarkList = () => {
 
 	const renderPostEmailMessage = () => {
 		return (
-			<EmailForm>
+			<EmailForm showEmailForm={ showEmailForm }>
 				<div className="title">{ postEmailMessage }</div>
 				<div className="emailFormRow">
 					<div className="emailFormButton"
@@ -122,7 +138,7 @@ const BookmarkList = () => {
 			return transcript.map((line, index) => {
 				if (line.bookmark) {
 					return (
-						<Line key={ 'bookmarkLine' + index }>
+						<Line	key={ 'bookmarkLine' + index }>
 							<Content>
 								<Timestamp>{ line.timestamp }</Timestamp>
 								{ indexToEdit == index ? 
@@ -180,7 +196,6 @@ const BookmarkList = () => {
 
 	const handleEmailIconClick = () => {
 		setShowEmailForm(true) 
-
 	}
 
 	return (
@@ -191,8 +206,12 @@ const BookmarkList = () => {
 					onClick={ () => handleEmailIconClick() } 
 					className="icon icon-Email" /> }
 				bookmarksExist={ true } /> 
-			<Main>
-				{ showEmailForm && renderEmailForm() }
+			<Main onClick={ () => {
+				if (indexToEdit != null) {
+					setIndexToEdit(null)
+				}
+			}}>
+				{ renderEmailForm() }
 				{ renderBookmarks() }
 			</Main>
 		</Container>
@@ -280,7 +299,7 @@ const EmailFormWrapper = styled.div`
 	top: 0;
 	left: 0;
 	width: 100vw;
-	height: 100vh;
+	height: ${ p => p.showEmailForm ? '100vh' : '0' };
 	z-index: 10000;
 	transform: translateX(100vw);
 	display: flex;
@@ -291,13 +310,15 @@ const EmailFormWrapper = styled.div`
 const Overlay = styled.div`
 	position: absolute;
 	width: 100%;
-	height: 100%;
+	height: ${ p => p.showEmailForm ? '100vh' : '0' };
 	background: rgba(0,0,0,0.5);
 	z-index: 1;
+	opacity: ${ p => !p.shouldClose && p.showEmailForm ? '1' : '0'};
+	transition: opacity 350ms cubic-bezier(0.19, 1, 0.22, 1);
 `
 
 const EmailForm = styled.div`
-	width: 80%;
+	width: ${ p => p.showEmailForm ? '80%' : '0' };
 	max-width: 300px;
 	padding: 12px;
 	display: flex;
@@ -305,6 +326,9 @@ const EmailForm = styled.div`
 	background: #333;
 	box-shadow: 0 0 3px rgba(0,0,0,0.9);
 	z-index: 2;
+	transform: ${ p => !p.shouldClose && p.showEmailForm ? 'translateY(0)' : 'translateY(100px)' };
+	opacity: ${ p => !p.shouldClose && p.showEmailForm ? 1 : 0};
+	transition: opacity 350ms cubic-bezier(0.19, 1, 0.22, 1), transform 350ms cubic-bezier(0.19, 1, 0.22, 1);
 
 	.title {
 		width: 100%;
