@@ -3,14 +3,14 @@ import styled from 'styled-components'
 import * as _ from 'underscore'
 
 import { GlobalContext } from '../contexts/GlobalContext'
-import { SpeechToTextContext } from '../contexts/SpeechToTextContext'
 import Header from './Header'
 import Controls from './Controls'
 import { notStrictEqual } from 'assert'
+import { STTContext } from '../contexts/STTContext'
 
 const Home = () => {
-	let { recognizerStop } = useContext(SpeechToTextContext)
 	let { isRecording, transcript, setTranscript, utterance, setUtterance, toggleBookmark, shouldBookmark, setShouldBookmark, setShowBookmarkList, bookmarksExist, shouldReset, setShouldReset } = useContext(GlobalContext)
+	let { stopListening } = useContext(STTContext)
 	let [ forceRender, setForceRender ] = useState(false)
 	let [ referenceNode, setReferenceNode ] = useState()
 	let [ scrolledToBottom, setScrolledToBottom ] = useState(false)
@@ -83,7 +83,7 @@ const Home = () => {
 	}
 
 	const clearTranscript = () => {
-		recognizerStop()
+		stopListening()
 		setTranscript([])
 		setShouldReset(true)
 	}

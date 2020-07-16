@@ -1,12 +1,12 @@
 import React, { useContext, useState, useEffect } from 'react'
 import styled from 'styled-components'
-import { SpeechToTextContext } from '../contexts/SpeechToTextContext'
 import { GlobalContext } from '../contexts/GlobalContext'
+import { STTContext } from '../contexts/STTContext'
 
 // let timers = []
 
 const Controls = ({ isRecording, shouldReset }) => {
-	let { recognizerStop, handleMicClick } = useContext(SpeechToTextContext)
+	let { startListening, stopListening } = useContext(STTContext)
 	let { setShouldReset, toggleBookmark, transcript, setShouldBookmark, utterance, duration, setDuration, timestamp } = useContext(GlobalContext)
 	let [ forceRender, setForceRender ] = useState(false)
 
@@ -20,10 +20,10 @@ const Controls = ({ isRecording, shouldReset }) => {
 
 	const handleRecordClick = () => {
 		if (isRecording) {
-			recognizerStop()
+			stopListening()
 			// stopTimer()
 		} else {
-			handleMicClick()
+			startListening(null, true, true)
 			// startTimer()
 		}
 	}

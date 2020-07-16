@@ -1,15 +1,15 @@
 import React from 'react'
 
 import GlobalContextProvider from './contexts/GlobalContext'
-import SpeechToTextContextProvider from './contexts/SpeechToTextContext'
 import Wrapper from './components/Wrapper'
+import STTContextProvider from './contexts/STTContext'
 
 const App = () => {
 	return (
 		<GlobalContextProvider>
-			<SpeechToTextContextProvider>
+			<STTContextProvider>
 				<Wrapper />
-			</SpeechToTextContextProvider>
+			</STTContextProvider>
 		</GlobalContextProvider>
 	);
 }

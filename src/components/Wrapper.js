@@ -2,18 +2,16 @@ import React, { useContext, useEffect } from 'react'
 import styled from 'styled-components'
 import Div100vh from 'react-div-100vh'
 
-import { SpeechToTextContext } from '../contexts/SpeechToTextContext'
 import Home from './Home'
 import BookmarkList from './BookmarkList'
 import { GlobalContext } from '../contexts/GlobalContext'
 
 const Wrapper = (props) => {
-	let { initStt } = useContext(SpeechToTextContext)
 	let { showBookmarkList } = useContext(GlobalContext)
 
-	useEffect(() => {
-		initStt()
-	}, [])
+	// useEffect(() => {
+	// 	initStt()
+	// }, [])
 
 	return (
 		<Div100vh>

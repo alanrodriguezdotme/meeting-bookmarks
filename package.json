@@ -12,7 +12,7 @@
   "license": "ISC",
   "dependencies": {
     "emailjs-com": "^2.4.1",
-    "microsoft-cognitiveservices-speech-sdk": "^1.8.0",
+    "microsoft-cognitiveservices-speech-sdk": "^1.12.1",
     "microsoft-speech-browser-sdk": "0.0.12",
     "react": "^16.8.6",
     "react-div-100vh": "^0.3.8",
